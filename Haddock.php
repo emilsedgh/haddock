@@ -60,10 +60,11 @@ class Route {
         if(empty($this->_paths))
             return Array();
 
-        $queryString = str_replace($request['SCRIPT_NAME'], '', $request['REQUEST_URI']);
+        $uri = str_replace($request['SCRIPT_NAME'], '', $request['REQUEST_URI']);
+        $uri = str_replace('?'.$request['QUERY_STRING'], '', $uri);
 
         foreach($this->_paths as $path) {
-            $params = $this->parse($path, $queryString);
+            $params = $this->parse($path, $uri);
 
             if($params === False)
                 continue;
