@@ -2,10 +2,16 @@
 
 namespace Haddock;
 
+define('POST', 'POST');
+define('GET', 'GET');
+define('DELETE', 'DELETE');
+define('PUT', 'PUT');
+
+
 class Route {
     protected $_paths = Array();
     protected $_callback = Null;
-    protected $_methods = Array('POST', 'GET', 'DELETE', 'PUT');
+    protected $_methods = Array(POST, GET, DELETE, PUT);
     protected $_hosts = Array();
 
     public function __construct() {
@@ -141,6 +147,22 @@ class Router {
         $this->addRoute($route);
 
         return $route;
+    }
+
+    public function post($path, $callback) {
+        return $this->handle($path, $callback)->method(POST);
+    }
+
+    public function put($path, $callback) {
+        return $this->handle($path, $callback)->method(PUT);
+    }
+
+    public function get($path, $callback) {
+        return $this->handle($path, $callback)->method(GET);
+    }
+
+    public function delete($path, $callback) {
+        return $this->handle($path, $callback)->method(DELETE);
     }
 
     public function addRoute(Route $route) {
