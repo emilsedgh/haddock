@@ -24,6 +24,7 @@ class Route {
     }
 
     public function method() {
+        $this->_methods = Array();
         $methods = func_get_args();
         foreach($methods as $method)
             $this->_methods[] = $method;
@@ -137,6 +138,15 @@ class Route {
 
 class Router {
     protected $_routes = Array();
+    protected static $_cleanUrl = False;
+
+    public static function setCleanUrl($clean) {
+        self::$_cleanUrl = (Boolean) $clean;
+    }
+
+    public static function getCleanUrl() {
+        return self::$_cleanUrl;
+    }
 
     public function handle($path, $callback) {
         $route = new Route;
@@ -176,7 +186,7 @@ class Router {
         }
     }
 
-    public static function getUrl($clean = False) {
+    public function getBaseUrl() {
         $host = $_SERVER['HTTP_HOST'];
 
         $url = 'http://'.$host;
@@ -184,8 +194,27 @@ class Router {
         if($_SERVER['SERVER_PORT'] != 80)
             $url .= ':'.$_SERVER['SERVER_PORT'];
 
-        if(!$clean)
-            $url .= $_SERVER['REQUEST_URI'];
+        return $url;
+    }
+
+    public function getUrl() {
+        $url = self::getBaseUrl();
+
+        if(!self::$_cleanUrl)
+            $url .= $_SERVER['SCRIPT_NAME'];
+
+        $url .= $_SERVER['PATH_INFO'];
+
+        return $url;
+    }
+
+    public function createUrl($uri) {
+        $url = self::getBaseUrl();
+
+        if(!self::$_cleanUrl)
+            $url .= $_SERVER['SCRIPT_NAME'];
+
+        $url .= $uri;
 
         return $url;
     }
