@@ -139,6 +139,7 @@ class Route {
 
 class Router {
     protected $_routes = Array();
+    protected $_404Handler = Null;
     protected static $_cleanUrl = False;
 
     public static function setCleanUrl($clean) {
@@ -181,13 +182,27 @@ class Router {
     }
 
     public function route() {
-        foreach($this->_routes as $route) {
-            if(!$route->route($_SERVER))
+        foreach($this->_routes as $route)
+            if($route->route($_SERVER))
+                break;
+            else
                 continue;
+
+        if(is_callable($this->get404Handler())) {
+            $callback = $this->get404Handler();
+            $callback($_SERVER);
         }
     }
 
-    public function getBaseUrl() {
+    public function get404Handler() {
+        return $this->_404Handler;
+    }
+
+    public function set404Handler($callback) {
+        $this->_404Handler = $callback;
+    }
+
+    public static function getBaseUrl() {
         $host = $_SERVER['HTTP_HOST'];
 
         $url = 'http://'.$host;
