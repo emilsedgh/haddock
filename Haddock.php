@@ -121,6 +121,7 @@ class Route {
             $parameter_names[] = $name;
         }
 
+        $val = rtrim($val, '/');
         $expr = '/^'.str_replace('/', '\/', $expr).'$/i';
 
         $matched = preg_match_all($expr, $val, $matches);
