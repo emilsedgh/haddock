@@ -198,7 +198,7 @@ class Router {
         return $url;
     }
 
-    public function getUrl() {
+    public static function getUrl() {
         $url = self::getBaseUrl();
 
         if(!self::$_cleanUrl)
@@ -209,7 +209,7 @@ class Router {
         return $url;
     }
 
-    public function createUrl($uri = '') {
+    public static function createUrl($uri = '') {
         $url = self::getBaseUrl();
 
         if(!self::$_cleanUrl)
