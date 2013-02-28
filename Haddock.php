@@ -210,7 +210,15 @@ class Router {
         if($_SERVER['SERVER_PORT'] != 80)
             $url .= ':'.$_SERVER['SERVER_PORT'];
 
-        return $url;
+        $path = $_SERVER['SCRIPT_FILENAME'];
+        $path = str_replace($_SERVER['DOCUMENT_ROOT'], Null, $path);
+
+        if(!self::$_cleanUrl) {
+            $fileName = end(explode('/', $path));
+            $path = str_replace($fileName, Null, $path);
+        }
+
+        return $url.$path;
     }
 
     public static function getUrl() {
